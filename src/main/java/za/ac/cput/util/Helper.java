@@ -2,13 +2,21 @@ package za.ac.cput.util;
 
 import org.apache.commons.validator.routines.EmailValidator;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.regex.Pattern;
 
 public class Helper {
+    private Helper() {
+        throw new AssertionError("ValidationHelper cannot be instantiated");
+    }
     public static void requireNotEmptyOrNull(String value, String fieldName) {
         if(value==null || value.isEmpty()){
             throw new IllegalArgumentException(fieldName + " cannot be empty");
         }
+    }
+    public static <T> T requireNonNull(T obj, String fieldName) {
+        return requireNonNull(obj, fieldName);
     }
     public static boolean requireNotNegative(int value, String fieldName) {
         if (value < 0) {
@@ -17,10 +25,7 @@ public class Helper {
         return true;
     }
     public static boolean isValidEmail(String email) {
-        if (!isValidEmailWithRegex(email)) {
-            throw new IllegalArgumentException(" is an invalid format");
-        }
-        return true;
+        return isValidEmailWithRegex(email);
     }
 
     public static boolean isValidEmailWithRegex(String email) {
@@ -28,13 +33,63 @@ public class Helper {
         Pattern PATTERN = Pattern.compile(REGEX_EMAIL);
         requireNotEmptyOrNull(email, "Email");
         if (!PATTERN.matcher(email).matches()) {
-            throw new IllegalArgumentException("Invalid Email");
+            throw new IllegalArgumentException("Invalid Email" + email);
         }
         return true;
     }
 
     public static boolean isValidEmailWithApacheCommons(String email){
-        return EmailValidator.getInstance().isValid(email);
+        requireNotEmptyOrNull(email, "Email");
+
+        if (!EmailValidator.getInstance().isValid(email)) {
+            throw new IllegalArgumentException("Invalid Email format: " + email);
+        }
+        return true;
+    }
+    public static void validateDateRange(LocalDateTime start, LocalDateTime end, String startField, String endField) {
+        if (start == null || end == null) {
+            throw new IllegalArgumentException("Dates cannot be null");
+        }
+        if (start.isAfter(end)) {
+            throw new IllegalArgumentException(startField + " must be before " + endField);
+        }
     }
 
+    public static String formatDateTime(LocalDateTime dateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        return dateTime != null ? dateTime.format(formatter) : null;
+    }
+    /**
+      * Validates South African phone number
+     */
+    public static boolean isValidSouthAfricanPhone(String phone) {
+        requireNotEmptyOrNull(phone, "Phone number");
+
+        // Format: +27XXXXXXXXX or 0XXXXXXXXX
+        String phoneRegex = "^(\\+27|0)[0-9]{9}$";
+        Pattern pattern = Pattern.compile(phoneRegex);
+
+        if (!pattern.matcher(phone).matches()) {
+            throw new IllegalArgumentException("Invalid South African phone number: " + phone);
+        }
+        return true;
+    }
+
+    /**
+     * Validates South African ID number
+     */
+    public static boolean isValidSouthAfricanId(String idNumber) {
+        requireNotEmptyOrNull(idNumber, "ID number");
+
+        // Basic format: 13 digits
+        String idRegex = "^[0-9]{13}$";
+        Pattern pattern = Pattern.compile(idRegex);
+
+        if (!pattern.matcher(idNumber).matches()) {
+            throw new IllegalArgumentException("Invalid South African ID number (must be 13 digits): " + idNumber);
+        }
+        return true;
+    }
 }
+
+
