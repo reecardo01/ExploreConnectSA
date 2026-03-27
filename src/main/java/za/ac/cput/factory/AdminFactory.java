@@ -33,7 +33,6 @@ public class AdminFactory {
         return new Admin.Builder(firstName, lastName, email, password, empId)
                 .setDepartment(department)
                 .setAccessLevel(accessLevel)
-                .copy(admin)
                 .build();
     }
 }

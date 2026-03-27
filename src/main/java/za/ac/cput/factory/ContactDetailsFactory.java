@@ -26,13 +26,19 @@ public class ContactDetailsFactory {
                                                    String emergencyContact,
                                                    String emergencyPhone) {
         ContactDetails contact = createContact(cellNumber, email);
-
+Helper.requireNotEmptyOrNull(cellNumber,"Cell Number");
+Helper.requireNotEmptyOrNull(homePhone, "Home Number");
+Helper.requireNotEmptyOrNull(workPhone, "Work Phone");
+Helper.requireNotEmptyOrNull(emergencyContact, "Emergency Contact");
+Helper.requireNotEmptyOrNull(emergencyPhone, "Emergency Phone");
+        if (!Helper.isValidEmail(email)) {
+            throw new IllegalArgumentException("Invalid email format: " + email);
+        }
         return new ContactDetails.Builder(cellNumber, email)
                 .setHomePhone(homePhone)
                 .setWorkPhone(workPhone)
                 .setEmergencyContact(emergencyContact)
                 .setEmergencyPhone(emergencyPhone)
-                .copy(contact)
                 .build();
     }
 }

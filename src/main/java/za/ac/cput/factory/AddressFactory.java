@@ -31,7 +31,6 @@ public class AddressFactory {
                 .setCountry(country)
                 .setAddressType(addressType)
                 .setDefault(isDefault)
-                .copy(address)
                 .build();
     }
 
