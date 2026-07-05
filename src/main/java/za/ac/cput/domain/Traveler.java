@@ -1,7 +1,7 @@
 package za.ac.cput.domain;
-/* Location.java
+/* Traveler.java
 
-   Location POJO class
+   Traveler POJO class
 
    Author: Alakhe Mxakato (230485316)
 
@@ -103,6 +103,11 @@ public class Traveler {
         private List<String> travelerNames;
         private List<LocalDate> travelerAges;
         private List<String> passportNumbers;
+
+        public Builder setTravelerId(Long travelerId) {
+            this.travelerId = travelerId;
+            return this;
+        }
 
         public Builder setAdultCount(int adultCount) {
             this.adultCount = adultCount;

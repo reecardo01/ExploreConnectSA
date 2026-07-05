@@ -1,7 +1,7 @@
 package za.ac.cput.domain;
-/* Location.java
+/* Address.java
 
-   Location POJO class
+   Address POJO class
 
    Author: Zamandlovu C Ndlovu (211204803)
 

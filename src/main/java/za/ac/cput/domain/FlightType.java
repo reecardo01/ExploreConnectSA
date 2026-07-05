@@ -1,7 +1,7 @@
 package za.ac.cput.domain;
-/* Location.java
+/* FlightType.enum
 
-   Location POJO class
+   FlightType POJO class
 
    Author: Zamandlovu C Ndlovu (211204803)
 

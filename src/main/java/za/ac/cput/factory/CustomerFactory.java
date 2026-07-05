@@ -1,63 +1,76 @@
 package za.ac.cput.factory;
+/* CustomerFactory.java
 
+   Customer Factory class
+
+   Author: Zamandlovu C Ndlovu (211204803)
+
+   Date: 28 June 2026
+*/
 import za.ac.cput.domain.*;
 import za.ac.cput.util.Helper;
-import java.time.LocalDateTime;
 import za.ac.cput.util.IdGenerator;
 
+import java.time.LocalDateTime;
 
 public class CustomerFactory {
 
     private static final IdGenerator idGenerator = new IdGenerator();
 
-    /**
-     * Creates a basic customer with minimal required fields
-     */
     public static Customer createCustomer(String firstName, String lastName,
-                                          String email, String password,
-                                          String phoneNumber) {
-        // Validate required fields
+                                          String email, String password) {
         Helper.requireNotEmptyOrNull(firstName, "First Name");
         Helper.requireNotEmptyOrNull(lastName, "Last Name");
         Helper.requireValidEmail(email, "Email");
         Helper.requireNotEmptyOrNull(password, "Password");
-        Helper.requireValidSouthAfricanPhone(phoneNumber, "Phone Number");
 
-        // Generate ID
-        String customerId = idGenerator.generateId("CUS");
+        Long userId = idGenerator.generateLongId();
 
         return new Customer.Builder()
-                .setUserId(Long.parseLong(customerId.substring(3)))
+                .setUserId(userId)
                 .setFirstName(firstName)
                 .setLastName(lastName)
                 .setEmail(email)
                 .setPassword(password)
+                .setRole(UserRole.CUSTOMER)
+                .setActive(true)
+                .setCreatedAt(LocalDateTime.now())
                 .build();
     }
 
-    /**
-     * Creates a customer with identity details
-     */
+
     public static Customer createCustomerWithIdentity(String firstName, String lastName,
                                                       String email, String password,
-                                                      String phoneNumber,
                                                       IdentityType identityType,
                                                       String identityNumber,
                                                       LocalDateTime dateOfBirth,
                                                       String nationality) {
-        Customer customer = createCustomer(firstName, lastName, email, password, phoneNumber);
+        Helper.requireNotEmptyOrNull(firstName, "First Name");
+        Helper.requireNotEmptyOrNull(lastName, "Last Name");
+        Helper.requireValidEmail(email, "Email");
+        Helper.requireNotEmptyOrNull(password, "Password");
+        Helper.requireNonNull(identityType, "Identity Type");
+        Helper.requireNotEmptyOrNull(identityNumber, "Identity Number");
+        Helper.requireNonNullDate(dateOfBirth, "Date of Birth");
+        Helper.requireNotEmptyOrNull(nationality, "Nationality");
 
-        // Validate identity details
         if (identityType == IdentityType.RSA_ID) {
             Helper.requireValidSouthAfricanId(identityNumber, "RSA ID");
         } else if (identityType == IdentityType.PASSPORT) {
             Helper.requireValidPassportNumber(identityNumber, "Passport Number");
         }
-        Helper.requireNonNullDate(dateOfBirth, "Date of Birth");
-        Helper.requireNotEmptyOrNull(nationality, "Nationality");
+
+        Long userId = idGenerator.generateLongId();
 
         return new Customer.Builder()
-                .copy(customer)
+                .setUserId(userId)
+                .setFirstName(firstName)
+                .setLastName(lastName)
+                .setEmail(email)
+                .setPassword(password)
+                .setRole(UserRole.CUSTOMER)
+                .setActive(true)
+                .setCreatedAt(LocalDateTime.now())
                 .setIdentityType(identityType)
                 .setIdentityNumber(identityNumber)
                 .setDateOfBirth(dateOfBirth)
@@ -65,23 +78,61 @@ public class CustomerFactory {
                 .build();
     }
 
-    /**
-     * Creates a full customer with all details
-     */
-    public static Customer createFullCustomer(String firstName, String lastName,
-                                              String email, String password,
-                                              String phoneNumber,
-                                              IdentityType identityType,
-                                              String identityNumber,
-                                              LocalDateTime dateOfBirth,
-                                              String nationality,
-                                              LanguageType preferredLanguage) {
-        Customer customer = createCustomerWithIdentity(firstName, lastName, email,
-                password, phoneNumber, identityType, identityNumber, dateOfBirth, nationality);
+
+    public static Customer createCustomerWithLoyalty(String firstName, String lastName,
+                                                     String email, String password,
+                                                     IdentityType identityType,
+                                                     String identityNumber,
+                                                     LocalDateTime dateOfBirth,
+                                                     String nationality,
+                                                     LoyaltyProgram loyaltyProgram) {
+        Helper.requireNonNull(loyaltyProgram, "Loyalty Program");
+
+        Customer customer = createCustomerWithIdentity(firstName, lastName, email, password,
+                identityType, identityNumber, dateOfBirth, nationality);
+
+        return new Customer.Builder()
+                .copy(customer)
+                .setLoyaltyProgram(loyaltyProgram)
+                .build();
+    }
+
+
+    public static Customer createCustomerWithLanguage(String firstName, String lastName,
+                                                      String email, String password,
+                                                      IdentityType identityType,
+                                                      String identityNumber,
+                                                      LocalDateTime dateOfBirth,
+                                                      String nationality,
+                                                      LanguageType preferredLanguage) {
+        Helper.requireNonNull(preferredLanguage, "Preferred Language");
+
+        Customer customer = createCustomerWithIdentity(firstName, lastName, email, password,
+                identityType, identityNumber, dateOfBirth, nationality);
 
         return new Customer.Builder()
                 .copy(customer)
                 .setPreferredLanguage(preferredLanguage)
                 .build();
     }
+
+
+    public static Customer createFullCustomer(String firstName, String lastName,
+                                              String email, String password,
+                                              IdentityType identityType,
+                                              String identityNumber,
+                                              LocalDateTime dateOfBirth,
+                                              String nationality,
+                                              LanguageType preferredLanguage,
+                                              LoyaltyProgram loyaltyProgram) {
+        Customer customer = createCustomerWithIdentity(firstName, lastName, email, password,
+                identityType, identityNumber, dateOfBirth, nationality);
+
+        return new Customer.Builder()
+                .copy(customer)
+                .setPreferredLanguage(preferredLanguage)
+                .setLoyaltyProgram(loyaltyProgram)
+                .build();
+    }
+
 }

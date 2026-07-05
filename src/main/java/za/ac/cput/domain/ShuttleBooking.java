@@ -1,7 +1,7 @@
 package za.ac.cput.domain;
-/* Location.java
+/* ShuttleBooking.java
 
-   Location POJO class
+   ShuttleBooking POJO class
 
    Author: Kabelo Moloko (230117015)
 
@@ -105,12 +105,6 @@ public class ShuttleBooking extends TransportBooking {
         return ChronoUnit.MINUTES.between(pickupTime, estimatedDropoffTime);
     }
 
-    public Location trackShuttle() {
-        // Implementation would integrate with GPS tracking
-        return new Location.Builder(-33.9249, 18.4241) // Cape Town coordinates
-                .setAddress("Current Location")
-                .build();
-    }
 
     public void contactDriver() {
         // Implementation would initiate call or message to driver

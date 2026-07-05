@@ -86,10 +86,21 @@ public class Location {
         private String address;
         private LocalDateTime timestamp;
 
-        public Builder(double latitude, double longitude) {
+        public Builder set(double latitude, double longitude) {
             this.latitude = latitude;
             this.longitude = longitude;
             this.timestamp = LocalDateTime.now();
+            return this;
+        }
+
+        public Builder setLatitude(double latitude) {
+            this.latitude = latitude;
+            return this;
+        }
+
+        public Builder setLongitude(double longitude) {
+            this.longitude = longitude;
+            return this;
         }
 
         public Builder setAddress(String address) {

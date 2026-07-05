@@ -87,17 +87,38 @@ public class BoardingPass {
         private LocalDateTime boardingTime;
         private String qrCode;
 
-        public Builder(FlightBooking flightBooking) {
+        public Builder set (FlightBooking flightBooking) {
             this.bookingReference = flightBooking.getBookingReference();
             this.flightNumber = flightBooking.getFlightNumber();
             this.seatNumber = flightBooking.getSeatNumbers();
             this.gate = "A" + (int) (Math.random() * 10);
             this.boardingTime = flightBooking.getDepartureTime().minusHours(2);
             generateQR();
+            return this;
         }
 
         private void generateQR() {
             this.qrCode = "BP-" + bookingReference + "-" + seatNumber;
+        }
+
+        public Builder setBookingReference(String bookingReference) {
+            this.bookingReference = bookingReference;
+            return this;
+        }
+
+        public Builder setFlightNumber(String flightNumber) {
+            this.flightNumber = flightNumber;
+            return this;
+        }
+
+        public Builder setBoardingTime(LocalDateTime boardingTime) {
+            this.boardingTime = boardingTime;
+            return this;
+        }
+
+        public Builder setQrCode(String qrCode) {
+            this.qrCode = qrCode;
+            return this;
         }
 
         public Builder setGate(String gate) {

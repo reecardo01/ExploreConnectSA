@@ -1,7 +1,7 @@
 package za.ac.cput.domain;
-/* Location.java
+/* BillingAddress.java
 
-   Location POJO class
+   BillingAddress POJO class
 
    Author: Entle Mayezo	(230076238)
 
@@ -64,12 +64,32 @@ public class BillingAddress {
         private String country;
         private String phone;
 
-        public Builder(String fullName, String addressLine1, String city, String postalCode) {
+//        public Builder(String fullName, String addressLine1, String city, String postalCode) {
+//            this.fullName = fullName;
+//            this.addressLine1 = addressLine1;
+//            this.city = city;
+//            this.postalCode = postalCode;
+//            this.country = "South Africa";
+//        }
+
+        public Builder setFullName(String fullName) {
             this.fullName = fullName;
+            return this;
+        }
+
+        public Builder setAddressLine1(String addressLine1) {
             this.addressLine1 = addressLine1;
+            return this;
+        }
+
+        public Builder setCity(String city) {
             this.city = city;
+            return this;
+        }
+
+        public Builder setPostalCode(String postalCode) {
             this.postalCode = postalCode;
-            this.country = "South Africa";
+            return this;
         }
 
         public Builder setAddressLine2(String addressLine2) {

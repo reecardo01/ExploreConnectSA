@@ -1,7 +1,7 @@
 package za.ac.cput.domain;
-/* Location.java
+/* CreditCardDetails.java
 
-   Location POJO class
+   CreditCardDetails POJO class
 
    Author: Ricardo Mukwevho (222567023)
 
@@ -68,26 +68,56 @@ public class CreditCardDetails {
         private String cardType;
         private boolean isDefault;
 
-        public Builder(String cardNumber, String cardHolderName, String expiryDate) {
+        public Builder set(String cardNumber, String cardHolderName, String expiryDate) {
             this.cardNumber = cardNumber;
             this.cardHolderName = cardHolderName;
             this.expiryDate = expiryDate;
-            this.lastFourDigits = cardNumber.substring(cardNumber.length() - 4);
 
-            // Determine card type from first digits
-            if (cardNumber.startsWith("4")) {
-                this.cardType = "Visa";
-            } else if (cardNumber.startsWith("5")) {
-                this.cardType = "Mastercard";
-            } else if (cardNumber.startsWith("3")) {
-                this.cardType = "American Express";
-            } else {
-                this.cardType = "Unknown";
+            // Extract last 4 digits
+            if (cardNumber != null && cardNumber.length() >= 4) {
+                this.lastFourDigits = cardNumber.substring(cardNumber.length() - 4);
             }
+
+            // Determine card type
+            if (cardNumber != null) {
+                if (cardNumber.startsWith("4")) {
+                    this.cardType = "Visa";
+                } else if (cardNumber.startsWith("5")) {
+                    this.cardType = "Mastercard";
+                } else if (cardNumber.startsWith("3")) {
+                    this.cardType = "American Express";
+                } else if (cardNumber.startsWith("6")) {
+                    this.cardType = "Discover";
+                } else {
+                    this.cardType = "Unknown";
+                }
+            }
+            return this;
         }
+
 
         public Builder setCardNumber(String cardNumber) {
             this.cardNumber = cardNumber;
+
+            // Extract last 4 digits
+            if (cardNumber != null && cardNumber.length() >= 4) {
+                this.lastFourDigits = cardNumber.substring(cardNumber.length() - 4);
+            }
+
+            // Determine card type
+            if (cardNumber != null) {
+                if (cardNumber.startsWith("4")) {
+                    this.cardType = "Visa";
+                } else if (cardNumber.startsWith("5")) {
+                    this.cardType = "Mastercard";
+                } else if (cardNumber.startsWith("3")) {
+                    this.cardType = "American Express";
+                } else if (cardNumber.startsWith("6")) {
+                    this.cardType = "Discover";
+                } else {
+                    this.cardType = "Unknown";
+                }
+            }
             return this;
         }
 

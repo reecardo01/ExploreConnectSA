@@ -1,7 +1,7 @@
 package za.ac.cput.domain;
-/* Location.java
+/* HotelBooking.java
 
-   Location POJO class
+   HotelBooking POJO class
 
    Author: Kabelo Moloko (230117015)
 

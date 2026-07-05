@@ -1,7 +1,7 @@
 package za.ac.cput.domain;
-/* Location.java
+/* CancellationPolicy.java
 
-   Location POJO class
+   CancellationPolicy POJO class
 
    Author: Entle Mayezo	(230076238)
 
@@ -69,6 +69,21 @@ public class CancellationPolicy {
         private double refundPercentage;
         private boolean allowsModification;
         private String terms;
+
+        public Builder setPolicyId(String policyId) {
+            this.policyId = policyId;
+            return this;
+        }
+
+        public Builder setPolicyName(String policyName) {
+            this.policyName = policyName;
+            return this;
+        }
+
+        public Builder setRefundPercentage(double refundPercentage) {
+            this.refundPercentage = refundPercentage;
+            return this;
+        }
 
         public Builder setHoursBeforeCancellation(int hoursBeforeCancellation) {
             this.hoursBeforeCancellation = hoursBeforeCancellation;

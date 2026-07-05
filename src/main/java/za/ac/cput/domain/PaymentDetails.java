@@ -1,7 +1,7 @@
 package za.ac.cput.domain;
-/* Location.java
+/* PaymentDetails.java
 
-   Location POJO class
+   PaymentDetails POJO class
 
    Author: Ricardo Mukwevho (222567023)
 
@@ -77,6 +77,13 @@ public class PaymentDetails {
         return amount > 0 && method != null &&
                 (method != PaymentMethod.CREDIT_CARD || creditCardDetails != null);
     }
+    public boolean processPayment() {
+        this.status = PaymentStatus.PAID;
+        this.transactionId = "TXN-" + System.currentTimeMillis();
+        this.paymentDate = LocalDateTime.now();
+        this.lastUpdated = LocalDateTime.now();
+        return true;
+    }
 
     @Override
     public String toString() {
@@ -104,7 +111,30 @@ public class PaymentDetails {
         private CreditCardDetails creditCardDetails;
         private String receiptUrl;
 
+        public Builder setPaymentId(Long paymentId) {
+            this.paymentId = paymentId;
+            return this;
+        }
 
+        public Builder setMethod(PaymentMethod method) {
+            this.method = method;
+            return this;
+        }
+
+        public Builder setAmount(double amount) {
+            this.amount = amount;
+            return this;
+        }
+
+        public Builder setCurrency(String currency) {
+            this.currency = currency;
+            return this;
+        }
+
+        public Builder setLastUpdated(LocalDateTime lastUpdated) {
+            this.lastUpdated = lastUpdated;
+            return this;
+        }
 
         public Builder setTransactionId(String transactionId) {
             this.transactionId = transactionId;

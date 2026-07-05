@@ -1,7 +1,7 @@
 package za.ac.cput.domain;
-/* Location.java
+/* FBooking.enum
 
-   Location POJO class
+   FBooking POJO class
 
    Author: Zamandlovu C Ndlovu (211204803)
 

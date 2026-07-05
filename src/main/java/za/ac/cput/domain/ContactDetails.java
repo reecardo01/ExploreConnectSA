@@ -1,7 +1,7 @@
 package za.ac.cput.domain;
-/* Location.java
+/* ContactDetails.java
 
-   Location POJO class
+   ContactDetails POJO class
 
    Author: Zamandlovu C Ndlovu (211204803)
 
@@ -79,6 +79,20 @@ public class ContactDetails {
         private String emergencyContact;
         private String emergencyPhone;
 
+        public Builder setContactId(Long contactId) {
+            this.contactId = contactId;
+            return this;
+        }
+
+        public Builder setEmail(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public Builder setCellNumber(String cellNumber) {
+            this.cellNumber = cellNumber;
+            return this;
+        }
 
         public Builder setHomePhone(String homePhone) {
             this.homePhone = homePhone;

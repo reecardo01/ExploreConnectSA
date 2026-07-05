@@ -1,7 +1,7 @@
 package za.ac.cput.domain;
-/* Location.java
+/* Review.java
 
-   Location POJO class
+   Review POJO class
 
    Author: Alakhe Mxakato (230485316)
 
@@ -85,6 +85,25 @@ public class Review {
         private Customer reviewer;
         private Booking booking;
 
+        public Builder setReviewId(Long reviewId) {
+            this.reviewId = reviewId;
+            return this;
+        }
+
+        public Builder setRating(int rating) {
+            this.rating = rating;
+            return this;
+        }
+
+        public Builder setComment(String comment) {
+            this.comment = comment;
+            return this;
+        }
+
+        public Builder setReviewer(Customer reviewer) {
+            this.reviewer = reviewer;
+            return this;
+        }
 
         public Builder setServiceType(String serviceType) {
             this.serviceType = serviceType;

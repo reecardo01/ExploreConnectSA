@@ -1,7 +1,7 @@
 package za.ac.cput.domain;
-/* Location.java
+/* PaymentStatus.enum
 
-   Location POJO class
+   PaymentStatus POJO class
 
    Author: Zamandlovu C Ndlovu (211204803)
 

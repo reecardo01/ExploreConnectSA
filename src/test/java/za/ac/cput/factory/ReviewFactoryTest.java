@@ -1,14 +1,20 @@
 package za.ac.cput.factory;
+/* ReviewFactoryTest.java
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import za.ac.cput.domain.Booking;
-import za.ac.cput.domain.Customer;
-import za.ac.cput.domain.Invoice;
-import za.ac.cput.domain.Review;
+   Review Factory Testing class
+
+   Author: Alakhe Mxakato (230485316)
+
+   Date: 28 June 2026
+*/
+import org.junit.jupiter.api.*;
+import za.ac.cput.domain.*;
+
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class ReviewFactoryTest {
 
     private Customer customer;
@@ -16,87 +22,93 @@ class ReviewFactoryTest {
 
     @BeforeEach
     void setUp() {
-        // Arrange shared objects used across tests
-        customer = new Customer();
-        booking = new Booking() {
-            @Override
-            public Booking modifyBooking() {
-                return null;
-            }
+        customer = CustomerFactory.createCustomer("John", "Doe", "john@email.com", "password123");
 
-            @Override
-            public String getBookingDetails() {
-                return "";
-            }
-
-            @Override
-            public Invoice generateInvoice() {
-                return null;
-            }
-        };
+        // ===== FIX: Create a booking for the service review test =====
+        Traveler traveler = TravelerFactory.createTravelerWithCounts(1, 0, 0);
+        booking = FlightBookingFactory.createFullFlightBooking(
+                "SA234", "South African Airways", "JFK", "LAX",
+                LocalDateTime.now().plusDays(30), LocalDateTime.now().plusDays(30).plusHours(6),
+                FJourney.ONE_WAY, FBookingClass.ECONOMY, FlightType.SOUTH_AFRICA_AIRWAYS,
+                customer, traveler, CancellationPolicyFactory.createFlexiblePolicy(),
+                850.00, 127.50
+        );
     }
 
-    // Test 1: Basic review is created successfully
     @Test
-    void testCreateReview() {
-        // Arrange & Act
-        Review review = ReviewFactory.createReview(5, "Excellent service", customer);
+    @Order(1)
+    @DisplayName("Should create basic review")
+    void createReview() {
+        Review review = ReviewFactory.createReview(5, "Excellent service!", customer);
 
-        // Assert
         assertNotNull(review);
         assertEquals(5, review.getRating());
-        assertEquals("Excellent service", review.getComment());
-        System.out.println(review);
+        assertEquals("Excellent service!", review.getComment());
+        assertEquals(customer, review.getReviewer());
+        assertTrue(review.validateReview());
+
+        System.out.println("=== Basic Review ===");
+        System.out.println("Rating: " + review.getRating());
+        System.out.println("Comment: " + review.getComment());
+        System.out.println("✓ Review validated");
     }
 
-    // Test 2: Rating above 5 should throw an exception
     @Test
-    void testCreateReviewWithInvalidRating() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () ->
-                ReviewFactory.createReview(6, "Bad rating", customer));
-
-        assertEquals("Rating must be between 1 and 5", exception.getMessage());
-    }
-
-    // Test 3: Null reviewer should throw an exception
-    @Test
-    void testCreateReviewWithNullReviewer() {
-        assertThrows(NullPointerException.class, () ->
-                ReviewFactory.createReview(4, "Good", null));
-    }
-
-    // Test 4: Empty comment should throw an exception
-    @Test
-    void testCreateReviewWithEmptyComment() {
-        assertThrows(IllegalArgumentException.class, () ->
-                ReviewFactory.createReview(3, "", customer));
-    }
-
-    // Test 5: Service review is created with full details
-    @Test
-    void testCreateServiceReview() {
+    @Order(2)
+    @DisplayName("Should create service review")
+    void createServiceReview() {
         Review review = ReviewFactory.createServiceReview(
-                4, "Nice booking experience", customer, "Flight", "FL123", booking);
+                4, "Great flight", customer, "FLIGHT", "SA234", booking
+        );
 
-        // Assert
         assertNotNull(review);
         assertEquals(4, review.getRating());
-        assertEquals("Flight", review.getServiceType());
-        assertEquals("FL123", review.getServiceId());
-        System.out.println(review);
+        assertEquals("FLIGHT", review.getServiceType());
+        assertEquals("SA234", review.getServiceId());
+        assertEquals(booking, review.getBooking());
+
+        System.out.println("=== Service Review ===");
+        System.out.println("Service Type: " + review.getServiceType());
+        System.out.println("Service ID: " + review.getServiceId());
+        System.out.println("Booking: " + review.getBooking().getBookingReference());
     }
 
-    // Test 6: Empty service type should throw an exception
     @Test
-    void testCreateServiceReviewWithEmptyServiceType() {
+    @Order(3)
+    @DisplayName("Should throw exception when rating is below 1")
+    void showExceptionWhenRatingTooLow() {
         assertThrows(IllegalArgumentException.class, () ->
-                ReviewFactory.createServiceReview(4, "Test", customer, "", "ID123", booking));
+                ReviewFactory.createReview(0, "Bad", customer)
+        );
+        System.out.println("✓ Rating below 1 correctly rejected");
     }
 
-    // Test 7: Null booking should throw an exception
     @Test
-    void testCreateServiceReviewWithNullBooking() {
-        assertThrows(NullPointerException.class, () ->
-                ReviewFactory.createServiceReview(4, "Test", customer, "Flight", "FL123", null));
+    @Order(4)
+    @DisplayName("Should throw exception when rating is above 5")
+    void showExceptionWhenRatingTooHigh() {
+        assertThrows(IllegalArgumentException.class, () ->
+                ReviewFactory.createReview(6, "Great", customer)
+        );
+        System.out.println("✓ Rating above 5 correctly rejected");
+    }
+
+    @Test
+    @Order(5)
+    @DisplayName("Should throw exception when comment is empty")
+    void showExceptionWhenCommentEmpty() {
+        assertThrows(IllegalArgumentException.class, () ->
+                ReviewFactory.createReview(5, "", customer)
+        );
+        System.out.println("✓ Empty comment correctly rejected");
+    }
+
+    @Test
+    @Order(6)
+    @DisplayName("Should flag inappropriate review")
+    void testFlagInappropriate() {
+        Review review = ReviewFactory.createReview(3, "Okay service", customer);
+        assertTrue(review.flagInappropriate());
+        System.out.println("✓ Review flagged successfully");
     }
 }

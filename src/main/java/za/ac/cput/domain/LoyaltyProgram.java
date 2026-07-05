@@ -1,7 +1,7 @@
 package za.ac.cput.domain;
-/* Location.java
+/* LoyaltyProgram.java
 
-   Location POJO class
+   LoyaltyProgram POJO class
 
    Author: Alakhe Mxakato (230485316)
 

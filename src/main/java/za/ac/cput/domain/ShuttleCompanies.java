@@ -1,7 +1,7 @@
 package za.ac.cput.domain;
-/* Location.java
+/* ShuttleCompanies.enum
 
-   Location POJO class
+   ShuttleCompanies POJO class
 
    Author: Zamandlovu C Ndlovu (211204803)
 

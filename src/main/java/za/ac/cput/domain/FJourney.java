@@ -1,7 +1,7 @@
 package za.ac.cput.domain;
-/* Location.java
+/* FJourney.enum
 
-   Location POJO class
+   FJourney POJO class
 
    Author: Zamandlovu C Ndlovu (211204803)
 

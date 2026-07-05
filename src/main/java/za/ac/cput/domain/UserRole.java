@@ -1,7 +1,7 @@
 package za.ac.cput.domain;
-/* Location.java
+/* UserRole.enum
 
-   Location POJO class
+   UserRole POJO class
 
    Author: Zamandlovu C Ndlovu (211204803)
 

@@ -1,7 +1,7 @@
 package za.ac.cput.domain;
-/* Location.java
+/* Booking.java
 
-   Location POJO class
+   Booking POJO class
 
    Author: Zamandlovu C Ndlovu (211204803)
 

@@ -1,7 +1,7 @@
 package za.ac.cput.domain;
-/* Location.java
+/* RoomTypeByOccupancy.enum
 
-   Location POJO class
+   RoomTypeByOccupancy POJO class
 
    Author: Zamandlovu C Ndlovu (211204803)
 

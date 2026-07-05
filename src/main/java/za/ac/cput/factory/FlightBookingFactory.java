@@ -1,32 +1,62 @@
 package za.ac.cput.factory;
+/* FlightBookingFactory.java
 
+   FlightBooking Factory class
+
+   Author: Kabelo Moloko (230117015)
+
+   Date: 28 June 2026
+*/
 import za.ac.cput.domain.*;
 import za.ac.cput.util.Helper;
+import za.ac.cput.util.IdGenerator;
 
 import java.time.LocalDateTime;
 
 public class FlightBookingFactory {
 
-    // Basic Flight Booking
+    private static final IdGenerator idGenerator = new IdGenerator();
+
+    /**
+     * Creates a basic flight booking
+     */
     public static FlightBooking createFlightBooking(String flightNumber, String airline,
                                                     String fromLocation, String toLocation,
                                                     LocalDateTime departureTime,
+                                                    LocalDateTime arrivalTime,
                                                     Customer customer, Traveler traveler) {
+        // Validate required fields
         Helper.requireNotEmptyOrNull(flightNumber, "Flight Number");
+        if (!Helper.isValidFlightNumber(flightNumber)) {
+            throw new IllegalArgumentException("Invalid Flight Number format");
+        }
         Helper.requireNotEmptyOrNull(airline, "Airline");
         Helper.requireNotEmptyOrNull(fromLocation, "From Location");
         Helper.requireNotEmptyOrNull(toLocation, "To Location");
-        Helper.requireNonNull(departureTime, "Departure Time");
+        Helper.requireNonNullDate(departureTime, "Departure Time");
+        Helper.requireNonNullDate(arrivalTime, "Arrival Time");
+        Helper.requireDateRange(departureTime, arrivalTime, "Departure Time", "Arrival Time");
         Helper.requireNonNull(customer, "Customer");
         Helper.requireNonNull(traveler, "Traveler");
 
-        return new FlightBooking.Builder(flightNumber, airline, fromLocation, toLocation, departureTime)
+        String bookingReference = idGenerator.generateBookingReference("FLT");
+
+        return new FlightBooking.Builder()
+                .setBookingReference(bookingReference)
+                .setFlightNumber(flightNumber)
+                .setAirline(airline)
+                .setFromLocation(fromLocation)
+                .setToLocation(toLocation)
+                .setDepartureTime(departureTime)
+                .setArrivalTime(arrivalTime)
                 .setBookedBy(customer)
                 .setTravelers(traveler)
                 .build();
     }
 
-    // Full Flight Booking with all details
+    /**
+     * Creates a full flight booking with all details
+     */
     public static FlightBooking createFullFlightBooking(String flightNumber, String airline,
                                                         String fromLocation, String toLocation,
                                                         LocalDateTime departureTime,
@@ -34,47 +64,26 @@ public class FlightBookingFactory {
                                                         FJourney journeyType,
                                                         FBookingClass bookingClass,
                                                         FlightType aircraftType,
-                                                        Customer customer,
-                                                        Traveler traveler,
+                                                        Customer customer, Traveler traveler,
                                                         CancellationPolicy cancellationPolicy,
                                                         double subtotal, double taxes) {
-        Helper.requireNonNull(arrivalTime, "Arrival Time");
+        FlightBooking flight = createFlightBooking(flightNumber, airline, fromLocation,
+                toLocation, departureTime, arrivalTime, customer, traveler);
+
         Helper.requireNonNull(journeyType, "Journey Type");
         Helper.requireNonNull(bookingClass, "Booking Class");
         Helper.requirePositive(subtotal, "Subtotal");
+        Helper.requireNotNegative(taxes, "Taxes");
 
-        FlightBooking flight = createFlightBooking(flightNumber, airline, fromLocation,
-                toLocation, departureTime, customer, traveler);
-
-        return new FlightBooking.Builder(flightNumber, airline, fromLocation, toLocation, departureTime)
-                .setArrivalTime(arrivalTime)
+        return new FlightBooking.Builder()
+                .copy(flight)
                 .setJourneyType(journeyType)
                 .setBookingClass(bookingClass)
                 .setAircraftType(aircraftType)
-                .setBookedBy(customer)
-                .setTravelers(traveler)
                 .setCancellationPolicy(cancellationPolicy)
                 .setSubtotal(subtotal)
                 .setTaxes(taxes)
                 .setTotalPrice(subtotal + taxes)
-                .copy(flight)
-                .build();
-    }
-
-    // Direct Flight Booking
-    public static FlightBooking createDirectFlightBooking(String flightNumber, String airline,
-                                                          String fromLocation, String toLocation,
-                                                          LocalDateTime departureTime,
-                                                          LocalDateTime arrivalTime,
-                                                          Customer customer, Traveler traveler) {
-        FlightBooking flight = createFlightBooking(flightNumber, airline, fromLocation,
-                toLocation, departureTime, customer, traveler);
-
-        return new FlightBooking.Builder(flightNumber, airline, fromLocation, toLocation, departureTime)
-                .setArrivalTime(arrivalTime)
-                .setDirectFlight(true)
-                .setStopOvers(0)
-                .copy(flight)
                 .build();
     }
 }

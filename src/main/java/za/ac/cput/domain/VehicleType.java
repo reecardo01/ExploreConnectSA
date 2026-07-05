@@ -1,7 +1,7 @@
 package za.ac.cput.domain;
-/* Location.java
+/* VehicleType.enum
 
-   Location POJO class
+   VehicleType POJO class
 
    Author: Zamandlovu C Ndlovu (211204803)
 

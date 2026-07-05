@@ -1,7 +1,7 @@
 package za.ac.cput.domain;
-/* Location.java
+/* BookingStatus.enum
 
-   Location POJO class
+   BookingStatus POJO class
 
    Author: Zamandlovu C Ndlovu (211204803)
 

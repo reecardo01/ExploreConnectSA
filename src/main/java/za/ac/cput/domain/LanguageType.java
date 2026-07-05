@@ -1,7 +1,7 @@
 package za.ac.cput.domain;
-/* Location.java
+/* LanguageType.enum
 
-   Location POJO class
+   LanguageType POJO class
 
    Author: Zamandlovu C Ndlovu (211204803)
 

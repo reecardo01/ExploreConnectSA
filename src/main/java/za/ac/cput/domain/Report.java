@@ -1,7 +1,7 @@
 package za.ac.cput.domain;
-/* Location.java
+/* Report.java
 
-   Location POJO class
+   Report POJO class
 
    Author: Alakhe Mxakato (230485316)
 
@@ -75,6 +75,7 @@ public class Report {
         private String generatedBy;
         private byte[] data;
         private String format;
+
 
         public Builder setReportId(String reportId) {
             this.reportId = reportId;

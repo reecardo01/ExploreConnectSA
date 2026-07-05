@@ -1,56 +1,101 @@
 package za.ac.cput.factory;
+/* PaymentDetailsFactory.java
 
-import za.ac.cput.domain.*;
+   PaymentDetails Factory class
+
+   Author: Ricardo Mukwevho (222567023)
+
+   Date: 28 June 2026
+*/
+import za.ac.cput.domain.PaymentMethod;
+import za.ac.cput.domain.PaymentStatus;
+import za.ac.cput.domain.PaymentDetails;
+import za.ac.cput.domain.BillingAddress;
+import za.ac.cput.domain.CreditCardDetails;
 import za.ac.cput.util.Helper;
+import za.ac.cput.util.IdGenerator;
 
 import java.time.LocalDateTime;
 
 public class PaymentDetailsFactory {
 
+    private static final IdGenerator idGenerator = new IdGenerator();
 
-    public static PaymentDetails createPaymentDetails(
-            PaymentMethod method,
-            double amount,
-            String currency
-    ) {
-
+    /**
+     * Creates a basic payment
+     */
+    public static PaymentDetails createPayment(PaymentMethod method, double amount, String currency) {
         Helper.requireNonNull(method, "Payment Method");
-
-        if (amount <= 0) {
-            throw new IllegalArgumentException("Amount must be greater than 0");
-        }
-
+        Helper.requirePositive(amount, "Amount");
         Helper.requireNotEmptyOrNull(currency, "Currency");
 
-        return new PaymentDetails.Builder(method, amount, currency)
+        Long paymentId = idGenerator.generateLongId();
+
+        return new PaymentDetails.Builder()
+                .setPaymentId(paymentId)
+                .setMethod(method)
+                .setAmount(amount)
+                .setCurrency(currency)
+                .setStatus(PaymentStatus.PENDING)
                 .setPaymentDate(LocalDateTime.now())
+                .setLastUpdated(LocalDateTime.now())
                 .build();
     }
 
-
-    public static PaymentDetails createFullPaymentDetails(
-            PaymentMethod method,
-            double amount,
-            String currency,
-            BillingAddress billingAddress,
-            CreditCardDetails creditCardDetails
-    ) {
-
-        PaymentDetails basePayment = createPaymentDetails(method, amount, currency);
-
-        // Validate billing address
+    /**
+     * Creates a payment with billing address
+     */
+    public static PaymentDetails createPaymentWithAddress(PaymentMethod method, double amount,
+                                                          String currency, BillingAddress billingAddress) {
         Helper.requireNonNull(billingAddress, "Billing Address");
 
+        PaymentDetails payment = createPayment(method, amount, currency);
 
-        if (method == PaymentMethod.CREDIT_CARD) {
-            Helper.requireNonNull(creditCardDetails, "Credit Card Details");
-        }
-
-        return new PaymentDetails.Builder(method, amount, currency)
-                .copy(basePayment)
+        return new PaymentDetails.Builder()
+                .copy(payment)
                 .setBillingAddress(billingAddress)
-                .setCreditCardDetails(creditCardDetails)
-                .setPaymentDate(LocalDateTime.now())
                 .build();
+    }
+
+    /**
+     * Creates a credit card payment
+     */
+    public static PaymentDetails createCreditCardPayment(double amount, String currency,
+                                                         BillingAddress billingAddress,
+                                                         CreditCardDetails creditCardDetails) {
+        Helper.requireNonNull(creditCardDetails, "Credit Card Details");
+
+        PaymentDetails payment = createPaymentWithAddress(PaymentMethod.CREDIT_CARD,
+                amount, currency, billingAddress);
+
+        return new PaymentDetails.Builder()
+                .copy(payment)
+                .setCreditCardDetails(creditCardDetails)
+                .build();
+    }
+
+    /**
+     * Creates a debit card payment
+     */
+    public static PaymentDetails createDebitCardPayment(double amount, String currency,
+                                                        BillingAddress billingAddress,
+                                                        CreditCardDetails debitCardDetails) {
+        Helper.requireNonNull(debitCardDetails, "Debit Card Details");
+
+        PaymentDetails payment = createPaymentWithAddress(PaymentMethod.DEBIT_CARD,
+                amount, currency, billingAddress);
+
+        return new PaymentDetails.Builder()
+                .copy(payment)
+                .setCreditCardDetails(debitCardDetails)
+                .build();
+    }
+
+    /**
+     * Creates an EFT payment
+     */
+    public static PaymentDetails createEFTPayment(double amount, String currency,
+                                                  BillingAddress billingAddress) {
+        return createPaymentWithAddress(PaymentMethod.EFT, amount, currency, billingAddress);
     }
 }

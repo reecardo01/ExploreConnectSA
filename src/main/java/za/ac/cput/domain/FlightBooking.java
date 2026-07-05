@@ -1,7 +1,7 @@
 package za.ac.cput.domain;
-/* Location.java
+/* FlightBooking.java
 
-   Location POJO class
+   FlightBooking POJO class
 
    Author: Kabelo Moloko (230117015)
 
@@ -101,7 +101,7 @@ public class FlightBooking  extends Booking {
 
     // Business methods
     public BoardingPass checkIn() {
-        return new BoardingPass.Builder(this).build();
+        return new BoardingPass.Builder().build();
     }
 
     public boolean selectSeat(String seatNumber) {

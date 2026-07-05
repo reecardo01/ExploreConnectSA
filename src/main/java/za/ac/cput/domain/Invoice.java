@@ -1,7 +1,7 @@
 package za.ac.cput.domain;
-/* Location.java
+/* Invoice.java
 
-   Location POJO class
+   Invoice POJO class
 
    Author: Ricardo Mukwevho (222567023)
 
@@ -70,8 +70,11 @@ public class Invoice {
     }
 
     public void sendViaEmail() {
-        System.out.println("Invoice " + invoiceNumber + " emailed to " +
-                booking.getBookedBy().getEmail());
+        String email = "recipient@email.com"; // Default fallback
+        if (booking != null && booking.getBookedBy() != null) {
+            email = booking.getBookedBy().getEmail();
+        }
+        System.out.println("Invoice " + invoiceNumber + " emailed to " + email);
     }
 
     public void addItem(LineItem item) {
@@ -100,6 +103,35 @@ public class Invoice {
         private double total;
         private String paymentTerms;
 
+        public Builder setInvoiceNumber(String invoiceNumber) {
+            this.invoiceNumber = invoiceNumber;
+            return this;
+        }
+
+        public Builder setIssueDate(LocalDateTime issueDate) {
+            this.issueDate = issueDate;
+            return this;
+        }
+
+        public Builder setDueDate(LocalDateTime dueDate) {
+            this.dueDate = dueDate;
+            return this;
+        }
+
+        public Builder setBooking(Booking booking) {
+            this.booking = booking;
+            return this;
+        }
+
+        public Builder setTax(double tax) {
+            this.tax = tax;
+            return this;
+        }
+
+        public Builder setTotal(double total) {
+            this.total = total;
+            return this;
+        }
 
         public Builder setItems(List<LineItem> items) {
             this.items = items;

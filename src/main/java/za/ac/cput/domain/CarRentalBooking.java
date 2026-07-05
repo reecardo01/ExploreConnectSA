@@ -1,7 +1,7 @@
 package za.ac.cput.domain;
-/* Location.java
+/* CarRentalBooking.java
 
-   Location POJO class
+   CarRentalBooking POJO class
 
    Author: Kabelo Moloko (230117015)
 
@@ -200,6 +200,75 @@ public class CarRentalBooking extends TransportBooking {
         private double securityDeposit;
 
 
+        public Builder setBookingId(Long bookingId) {
+            this.bookingId = bookingId;
+            return this;
+        }
+
+        public Builder setBookingReference(String bookingReference) {
+            this.bookingReference = bookingReference;
+            return this;
+        }
+
+        public Builder setBookingDate(LocalDateTime bookingDate) {
+            this.bookingDate = bookingDate;
+            return this;
+        }
+
+        public Builder setLastModified(LocalDateTime lastModified) {
+            this.lastModified = lastModified;
+            return this;
+        }
+
+        public Builder setStatus(BookingStatus status) {
+            this.status = status;
+            return this;
+        }
+
+        public Builder setCurrency(String currency) {
+            this.currency = currency;
+            return this;
+        }
+
+        public Builder setTransportId(String transportId) {
+            this.transportId = transportId;
+            return this;
+        }
+
+        public Builder setProvider(String provider) {
+            this.provider = provider;
+            return this;
+        }
+
+        public Builder setBookingTime(LocalDateTime bookingTime) {
+            this.bookingTime = bookingTime;
+            return this;
+        }
+
+        public Builder setRentalId(String rentalId) {
+            this.rentalId = rentalId;
+            return this;
+        }
+
+        public Builder setRentalCompany(String rentalCompany) {
+            this.rentalCompany = rentalCompany;
+            return this;
+        }
+
+        public Builder setCarModel(String carModel) {
+            this.carModel = carModel;
+            return this;
+        }
+
+        public Builder setPickupDate(LocalDateTime pickupDate) {
+            this.pickupDate = pickupDate;
+            return this;
+        }
+
+        public Builder setReturnDate(LocalDateTime returnDate) {
+            this.returnDate = returnDate;
+            return this;
+        }
 
         public Builder setCarCategory(String carCategory) {
             this.carCategory = carCategory;

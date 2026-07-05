@@ -1,47 +1,108 @@
 package za.ac.cput.factory;
+/* CancellationPolicyFactory.java
 
+   CancellationPolicy Factory class
+
+   Author: Entle Mayezo	(230076238)
+
+   Date: 28 June 2026
+*/
 import za.ac.cput.domain.CancellationPolicy;
 import za.ac.cput.util.Helper;
+import za.ac.cput.util.IdGenerator;
 
 public class CancellationPolicyFactory {
 
-    // Basic Cancellation Policy
-    public static CancellationPolicy createPolicy(String policyName, double refundPercentage) {
+    private static final IdGenerator idGenerator = new IdGenerator();
+
+    /**
+     * Creates a basic cancellation policy
+     */
+    public static CancellationPolicy createCancellationPolicy(String policyName,
+                                                              double refundPercentage) {
         Helper.requireNotEmptyOrNull(policyName, "Policy Name");
-        Helper.requirePositive(refundPercentage, "Refund Percentage");
+        Helper.requireInRange(refundPercentage, 0, 100, "Refund Percentage");
 
-        if (refundPercentage > 100) {
-            throw new IllegalArgumentException("Refund percentage cannot exceed 100");
-        }
+        String policyId = idGenerator.generateId("POL");
 
-        return new CancellationPolicy.Builder(policyName, refundPercentage)
+        return new CancellationPolicy.Builder()
+                .setPolicyId(policyId)
+                .setPolicyName(policyName)
+                .setRefundPercentage(refundPercentage)
+                .setHoursBeforeCancellation(24)
+                .setAllowsModification(true)
+                .setTerms("Standard cancellation policy applies.")
                 .build();
     }
 
-    // Flexible Policy (full refund up to 48 hours)
+    /**
+     * Creates a flexible policy (100% refund up to 48 hours)
+     */
     public static CancellationPolicy createFlexiblePolicy() {
-        return new CancellationPolicy.Builder("Flexible", 100.0)
+        String policyId = idGenerator.generateId("POL");
+
+        return new CancellationPolicy.Builder()
+                .setPolicyId(policyId)
+                .setPolicyName("Flexible")
+                .setRefundPercentage(100.0)
                 .setHoursBeforeCancellation(48)
                 .setAllowsModification(true)
                 .setTerms("Full refund if cancelled 48 hours before booking")
                 .build();
     }
 
-    // Standard Policy (50% refund up to 24 hours)
+    /**
+     * Creates a standard policy (50% refund up to 24 hours)
+     */
     public static CancellationPolicy createStandardPolicy() {
-        return new CancellationPolicy.Builder("Standard", 50.0)
+        String policyId = idGenerator.generateId("POL");
+
+        return new CancellationPolicy.Builder()
+                .setPolicyId(policyId)
+                .setPolicyName("Standard")
+                .setRefundPercentage(50.0)
                 .setHoursBeforeCancellation(24)
                 .setAllowsModification(true)
                 .setTerms("50% refund if cancelled 24 hours before booking")
                 .build();
     }
 
-    // Strict Policy (no refund)
+    /**
+     * Creates a strict policy (no refund)
+     */
     public static CancellationPolicy createStrictPolicy() {
-        return new CancellationPolicy.Builder("Strict", 0.0)
+        String policyId = idGenerator.generateId("POL");
+
+        return new CancellationPolicy.Builder()
+                .setPolicyId(policyId)
+                .setPolicyName("Strict")
+                .setRefundPercentage(0.0)
                 .setHoursBeforeCancellation(0)
                 .setAllowsModification(false)
                 .setTerms("No refunds for cancellations")
+                .build();
+    }
+
+    /**
+     * Creates a custom cancellation policy
+     */
+    public static CancellationPolicy createCustomPolicy(String policyName, double refundPercentage,
+                                                        int hoursBeforeCancellation, boolean allowsModification,
+                                                        String terms) {
+        Helper.requireNotEmptyOrNull(policyName, "Policy Name");
+        Helper.requireInRange(refundPercentage, 0, 100, "Refund Percentage");
+        Helper.requireNotNegative(hoursBeforeCancellation, "Hours Before Cancellation");
+        Helper.requireNotEmptyOrNull(terms, "Terms");
+
+        String policyId = idGenerator.generateId("POL");
+
+        return new CancellationPolicy.Builder()
+                .setPolicyId(policyId)
+                .setPolicyName(policyName)
+                .setRefundPercentage(refundPercentage)
+                .setHoursBeforeCancellation(hoursBeforeCancellation)
+                .setAllowsModification(allowsModification)
+                .setTerms(terms)
                 .build();
     }
 }

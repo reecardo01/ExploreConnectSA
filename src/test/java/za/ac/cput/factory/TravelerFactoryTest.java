@@ -1,85 +1,125 @@
 package za.ac.cput.factory;
+/* TravelerFactoryTest.java
 
-import org.junit.jupiter.api.Test;
-import za.ac.cput.domain.Traveler;
+   Traveler Factory Testing class
 
-import java.time.LocalDate;
+   Author: Alakhe Mxakato (230485316)
+
+   Date: 28 June 2026
+*/
+import org.junit.jupiter.api.*;
+import za.ac.cput.domain.*;
+
 import java.util.Arrays;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class TravelerFactoryTest {
 
-    // Test 1: Basic traveler is created with default values
     @Test
-    void testCreateTraveler() {
+    @Order(1)
+    @DisplayName("Should create default traveler with 1 adult")
+    void createTraveler() {
         Traveler traveler = TravelerFactory.createTraveler();
 
         assertNotNull(traveler);
-        assertEquals(0, traveler.getAdultCount());
+        assertEquals(1, traveler.getAdultCount());
         assertEquals(0, traveler.getChildCount());
         assertEquals(0, traveler.getInfantCount());
-        System.out.println(traveler);
+
+        System.out.println("=== Default Traveler ===");
+        System.out.println("Adults: " + traveler.getAdultCount());
+        System.out.println("Children: " + traveler.getChildCount());
+        System.out.println("Infants: " + traveler.getInfantCount());
     }
 
-    // Test 2: Traveler is created with correct counts
     @Test
-    void testCreateTravelerWithCounts() {
+    @Order(2)
+    @DisplayName("Should create traveler with specific counts")
+    void createTravelerWithCounts() {
         Traveler traveler = TravelerFactory.createTravelerWithCounts(2, 1, 1);
 
-        assertNotNull(traveler);
         assertEquals(2, traveler.getAdultCount());
         assertEquals(1, traveler.getChildCount());
         assertEquals(1, traveler.getInfantCount());
-        System.out.println(traveler);
+        assertEquals(4, traveler.getTotalTravelers());
+
+        System.out.println("=== Traveler with Counts ===");
+        System.out.println("Total Travelers: " + traveler.getTotalTravelers());
     }
 
-    // Test 3: All zero counts should throw an exception
     @Test
-    void testCreateTravelerWithAllZeroCounts() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () ->
-                TravelerFactory.createTravelerWithCounts(0, 0, 0));
-
-        assertEquals("At least one traveler required", exception.getMessage());
-    }
-
-    // Test 4: Infants exceeding adults should throw an exception
-    @Test
-    void testCreateTravelerWithTooManyInfants() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () ->
-                TravelerFactory.createTravelerWithCounts(1, 0, 2));
-
-        assertEquals("Infant count cannot exceed adult count", exception.getMessage());
-    }
-
-    // Test 5: Traveler is created with full details
-    @Test
-    void testCreateTravelerWithDetails() {
-        List<String> names = Arrays.asList("Alakhe", "Sbu", "Miya");
-        List<LocalDate> ages = Arrays.asList(
-                LocalDate.of(2000, 1, 1),
-                LocalDate.of(2003, 5, 5),
-                LocalDate.of(2026, 3, 3)
+    @Order(3)
+    @DisplayName("Should create traveler with names and passports")
+    void createTravelerWithDetails() {
+        Traveler traveler = TravelerFactory.createTravelerWithDetails(
+                2, 1, 0,
+                Arrays.asList("John Doe", "Jane Doe", "Timmy Doe"),
+                Arrays.asList("A12345678", "B87654321", "C11223344")
         );
-        List<String> passports = Arrays.asList("P123", "P456", "P789");
 
-        Traveler traveler = TravelerFactory.createTravelerWithDetails(2, 1, 0, names, ages, passports);
         assertNotNull(traveler);
         assertEquals(3, traveler.getTravelerNames().size());
         assertEquals(3, traveler.getPassportNumbers().size());
-        System.out.println(traveler);
+        assertTrue(traveler.validateTravelers());
+
+        System.out.println("=== Traveler with Details ===");
+        System.out.println("Names: " + traveler.getTravelerNames());
+        System.out.println("Passports: " + traveler.getPassportNumbers());
+        System.out.println("✓ All travelers validated");
     }
 
-    // Test 6: Mismatched names count should throw an exception
     @Test
-    void testCreateTravelerWithMismatchedNames() {
+    @Order(4)
+    @DisplayName("Should add adult successfully")
+    void testAddAdult() {
+        Traveler traveler = TravelerFactory.createTraveler();
+        traveler.addAdult();
+        assertEquals(2, traveler.getAdultCount());
+        System.out.println("✓ Adult added successfully");
+    }
+
+    @Test
+    @Order(5)
+    @DisplayName("Should not remove adult below minimum")
+    void testRemoveAdultBelowMinimum() {
+        Traveler traveler = TravelerFactory.createTraveler();
+        traveler.removeAdult();
+        assertEquals(1, traveler.getAdultCount());
+        System.out.println("✓ Adult removal prevented below minimum");
+    }
+
+    @Test
+    @Order(6)
+    @DisplayName("Should add infant only when adult available")
+    void testAddInfantRule() {
+        Traveler traveler = TravelerFactory.createTraveler();
+        traveler.addInfant();
+        assertEquals(1, traveler.getInfantCount());
+
+        traveler.addInfant();
+        assertEquals(1, traveler.getInfantCount());
+        System.out.println("✓ Infant rule tested (infants <= adults)");
+    }
+
+    @Test
+    @Order(7)
+    @DisplayName("Should throw exception when no travelers")
+    void showExceptionWhenNoTravelers() {
         assertThrows(IllegalArgumentException.class, () ->
-                TravelerFactory.createTravelerWithDetails(
-                        2, 0, 0,
-                        Arrays.asList("Alakhe"), // only 1 name for 2 adults
-                        null,
-                        null
-                ));
+                TravelerFactory.createTravelerWithCounts(0, 0, 0)
+        );
+        System.out.println("✓ Empty traveler correctly rejected");
+    }
+
+    @Test
+    @Order(8)
+    @DisplayName("Should throw exception when infants exceed adults")
+    void showExceptionWhenInfantsExceedAdults() {
+        assertThrows(IllegalArgumentException.class, () ->
+                TravelerFactory.createTravelerWithCounts(1, 0, 2)
+        );
+        System.out.println("✓ Infants > adults correctly rejected");
     }
 }

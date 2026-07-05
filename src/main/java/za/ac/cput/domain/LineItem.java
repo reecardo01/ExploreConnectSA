@@ -72,11 +72,31 @@ public class LineItem {
         private double unitPrice;
         private double total;
 
-        public Builder(String description, int quantity, double unitPrice) {
+        public Builder setDescription(String description) {
             this.description = description;
-            this.quantity = quantity;
-            this.unitPrice = unitPrice;
+            return this;
         }
+
+        public Builder setQuantity(int quantity) {
+            this.quantity = quantity;
+            return this;
+        }
+
+        public Builder setUnitPrice(double unitPrice) {
+            this.unitPrice = unitPrice;
+            return this;
+        }
+
+        public Builder setTotal(double total) {
+            this.total = total;
+            return this;
+        }
+
+//        public Builder(String description, int quantity, double unitPrice) {
+//            this.description = description;
+//            this.quantity = quantity;
+//            this.unitPrice = unitPrice;
+//        }
 
         public Builder copy(LineItem lineItem) {
             this.description = lineItem.description;
