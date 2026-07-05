@@ -1,7 +1,7 @@
 <details>
 <summary>🎯 ExploreConnectSA UML Diagram</summary>
 
- [![UML Diagram](https://img.shields.io/badge/View-UML%20Diagram-blue?style=for-the-badge)](https://github.com/user-attachments/files/29678167/Group_SD8_UpdatedUML.pdf)
+ [![UML Diagram](https://img.shields.io/badge/View-UML%20Diagram-blue?style=for-the-badge)](Group_SD8_UpdatedUML.pdf)
 </details>
   
 <details>
