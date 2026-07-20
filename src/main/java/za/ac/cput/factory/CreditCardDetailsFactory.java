@@ -12,9 +12,8 @@ import za.ac.cput.util.Helper;
 
 public class CreditCardDetailsFactory {
 
-    /**
-     * Creates credit card details
-     */
+    //Creates credit card details
+
     public static CreditCardDetails createCreditCardDetails(String cardNumber,
                                                             String cardHolderName,
                                                             String expiryDate) {
@@ -41,9 +40,8 @@ public class CreditCardDetailsFactory {
                 .build();
     }
 
-    /**
-     * Creates a default credit card
-     */
+    //Creates a default credit card
+
     public static CreditCardDetails createDefaultCreditCard(String cardNumber,
                                                             String cardHolderName,
                                                             String expiryDate) {
