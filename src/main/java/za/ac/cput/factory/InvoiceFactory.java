@@ -19,9 +19,8 @@ public class InvoiceFactory {
 
     private static final IdGenerator idGenerator = new IdGenerator();
 
-    /**
-     * Creates an invoice from a booking
-     */
+    // Creates an invoice from a booking
+     
     public static Invoice createInvoice(Booking booking) {
         Helper.requireNonNull(booking, "Booking");
 
@@ -49,9 +48,8 @@ public class InvoiceFactory {
         return invoice;
     }
 
-    /**
-     * Creates an invoice with billing address
-     */
+    // Creates an invoice with billing address
+     
     public static Invoice createInvoiceWithAddress(Booking booking, BillingAddress billingAddress) {
         Helper.requireNonNull(billingAddress, "Billing Address");
 
@@ -83,9 +81,8 @@ public class InvoiceFactory {
         return invoice;
     }
 
-    /**
-     * Creates an invoice with custom payment terms
-     */
+    //Creates an invoice with custom payment terms
+     
     public static Invoice createInvoiceWithTerms(Booking booking, BillingAddress billingAddress,
                                                  String paymentTerms) {
         Helper.requireNotEmptyOrNull(paymentTerms, "Payment Terms");
