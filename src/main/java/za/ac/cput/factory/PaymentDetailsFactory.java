@@ -21,9 +21,8 @@ public class PaymentDetailsFactory {
 
     private static final IdGenerator idGenerator = new IdGenerator();
 
-    /**
-     * Creates a basic payment
-     */
+    //Creates a basic payment
+     
     public static PaymentDetails createPayment(PaymentMethod method, double amount, String currency) {
         Helper.requireNonNull(method, "Payment Method");
         Helper.requirePositive(amount, "Amount");
@@ -42,9 +41,8 @@ public class PaymentDetailsFactory {
                 .build();
     }
 
-    /**
-     * Creates a payment with billing address
-     */
+    // Creates a payment with billing address
+     
     public static PaymentDetails createPaymentWithAddress(PaymentMethod method, double amount,
                                                           String currency, BillingAddress billingAddress) {
         Helper.requireNonNull(billingAddress, "Billing Address");
@@ -57,9 +55,8 @@ public class PaymentDetailsFactory {
                 .build();
     }
 
-    /**
-     * Creates a credit card payment
-     */
+    // Creates a credit card payment
+     
     public static PaymentDetails createCreditCardPayment(double amount, String currency,
                                                          BillingAddress billingAddress,
                                                          CreditCardDetails creditCardDetails) {
@@ -74,9 +71,8 @@ public class PaymentDetailsFactory {
                 .build();
     }
 
-    /**
-     * Creates a debit card payment
-     */
+    //Creates a debit card payment
+     
     public static PaymentDetails createDebitCardPayment(double amount, String currency,
                                                         BillingAddress billingAddress,
                                                         CreditCardDetails debitCardDetails) {
@@ -91,9 +87,8 @@ public class PaymentDetailsFactory {
                 .build();
     }
 
-    /**
-     * Creates an EFT payment
-     */
+    //Creates an EFT payment
+     
     public static PaymentDetails createEFTPayment(double amount, String currency,
                                                   BillingAddress billingAddress) {
         return createPaymentWithAddress(PaymentMethod.EFT, amount, currency, billingAddress);
